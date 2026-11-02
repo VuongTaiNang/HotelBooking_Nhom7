@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "API Connection Test";
+}
+
+<div class="container mt-5">
+
+    <h2>Hotel Booking API Connection</h2>
+
+    @if (ViewBag.Success == true)
+    {
+        <div class="alert alert-success mt-3">
+            Backend API connected successfully.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger mt-3">
+            Backend API connection failed.
+        </div>
+    }
+
+    <pre class="mt-3">@ViewBag.Result</pre>
+
+</div>

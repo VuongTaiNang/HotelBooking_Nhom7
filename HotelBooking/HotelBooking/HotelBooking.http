@@ -1,0 +1,74 @@
+@HotelBooking_HostAddress = https://localhost:7083
+
+### Health Check
+GET {{HotelBooking_HostAddress}}/api/database/health
+Accept: application/json
+
+
+### Available Rooms
+GET {{HotelBooking_HostAddress}}/api/rooms/available?checkIn=2026-12-20&checkOut=2026-12-22&guests=2
+Accept: application/json
+
+
+### Create Booking
+POST {{HotelBooking_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "roomId": 2,
+  "checkInDate": "2026-12-20",
+  "checkOutDate": "2026-12-22",
+  "guestCount": 2
+}
+
+
+### Confirm Booking
+PUT {{HotelBooking_HostAddress}}/api/bookings/22281/confirm
+Accept: application/json
+
+
+### Check-in Booking
+PUT {{HotelBooking_HostAddress}}/api/bookings/22281/check-in
+Accept: application/json
+
+
+### Check-out Booking
+PUT {{HotelBooking_HostAddress}}/api/bookings/22281/check-out
+Accept: application/json
+
+### Add Service
+POST {{HotelBooking_HostAddress}}/api/bookings/13/services
+Content-Type: application/json
+
+{
+  "serviceId": 1,
+  "quantity": 2
+}
+
+
+### Calculate Booking Total
+GET {{HotelBooking_HostAddress}}/api/bookings/13/total
+Accept: application/json
+
+
+### Booking History
+GET {{HotelBooking_HostAddress}}/api/bookings/history?phone=0901000001&from=2026-01-01&to=2027-01-01
+Accept: application/json
+
+
+### Create Booking For Cancel Test
+POST {{HotelBooking_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "roomId": 2,
+  "checkInDate": "2027-01-10",
+  "checkOutDate": "2027-01-12",
+  "guestCount": 2
+}
+
+### Cancel Booking
+PUT {{HotelBooking_HostAddress}}/api/bookings/22283/cancel
+Accept: application/json
