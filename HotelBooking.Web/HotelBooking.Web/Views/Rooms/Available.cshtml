@@ -1,0 +1,62 @@
+﻿@model HotelBooking.Web.Models.AvailableRoomsViewModel
+@{
+    ViewData["Title"] = "Phòng còn trống";
+
+    // Đổi trạng thái từ API sang chữ tiếng Việt và màu huy hiệu
+    (string Text, string Css) StatusInfo(string status) => status?.ToUpper() switch
+    {
+        "AVAILABLE" => ("Còn trống", "bg-success"),
+        "CLEANING" => ("Đang dọn", "bg-warning text-dark"),
+        "OCCUPIED" => ("Đang có khách", "bg-danger"),
+        _ => (status ?? "", "bg-secondary")
+    };  
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h2 class="mb-1">Phòng còn trống</h2>
+        <p class="text-muted mb-0">
+            @Model.Search.CheckIn.ToString("dd/MM/yyyy") - @Model.Search.CheckOut.ToString("dd/MM/yyyy")
+            &middot; @Model.Search.Guests khách
+            &middot; @Model.Rooms.Count phòng
+        </p>
+    </div>
+    <a class="btn btn-outline-primary" asp-controller="Rooms" asp-action="Search">Tìm lại</a>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+else if (!Model.Rooms.Any())
+{
+    <div class="alert alert-info">Không có phòng trống phù hợp với ngày và số khách bạn chọn.</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var room in Model.Rooms)
+        {
+            var st = StatusInfo(room.Status);
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Phòng @room.RoomNumber</h5>
+                            <span class="badge @st.Css">@st.Text</span>
+                        </div>
+                        <p class="text-muted mb-3">@room.TypeName</p>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Giá/đêm:</strong> @room.PricePerNight.ToString("N0") VNĐ</li>
+                            <li><strong>Số khách tối đa:</strong> @room.MaxGuests</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <a class="btn btn-primary w-100"
+                           href="/Bookings/Create?roomId=@room.RoomId">Đặt ngay</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
