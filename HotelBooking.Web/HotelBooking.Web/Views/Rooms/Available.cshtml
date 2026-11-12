@@ -53,7 +53,14 @@ else
                     </div>
                     <div class="card-footer bg-transparent border-0 pb-3">
                         <a class="btn btn-primary w-100"
-                           href="/Bookings/Create?roomId=@room.RoomId">Đặt ngay</a>
+                           asp-controller="Bookings"
+                           asp-action="Create"
+                           asp-route-roomId="@room.RoomId"
+                           asp-route-checkIn="@Model.Search.CheckIn.ToString("yyyy-MM-dd")"
+                           asp-route-checkOut="@Model.Search.CheckOut.ToString("yyyy-MM-dd")"
+                           asp-route-guests="@Model.Search.Guests">
+                            Đặt ngay
+                        </a>
                     </div>
                 </div>
             </div>
