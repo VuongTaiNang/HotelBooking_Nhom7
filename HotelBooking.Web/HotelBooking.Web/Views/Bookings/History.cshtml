@@ -1,0 +1,76 @@
+@model HotelBooking.Web.Models.BookingHistoryViewModel
+@{
+    ViewData["Title"] = "Booking History";
+}
+<link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+<section class="page-heading">
+    <a asp-controller="Home" asp-action="Index" class="eyebrow-link">← Trang chủ</a>
+    <p class="eyebrow">TRA CỨU</p>
+    <h1>Lịch sử đặt phòng</h1>
+    <p>Tra cứu booking bằng số điện thoại và khoảng thời gian tạo đặt phòng.</p>
+</section>
+<div class="form-card history-search">
+    <form asp-action="History" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-grid three">
+            <div class="field">
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" placeholder="VD: 0901234567" />
+                <span asp-validation-for="Phone"></span>
+            </div>
+            <div class="field">
+                <label asp-for="From"></label>
+                <input asp-for="From" type="date" />
+                <span asp-validation-for="From"></span>
+            </div>
+            <div class="field">
+                <label asp-for="To"></label>
+                <input asp-for="To" type="date" />
+                <span asp-validation-for="To"></span>
+            </div>
+        </div>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Tìm booking <span>→</span></button></div>
+    </form>
+</div>
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="notice error">@Model.Error</div>
+}
+@if (Model.HasSearched && string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="results-heading"><div><p class="eyebrow">KẾT QUẢ</p><h2>@Model.Bookings.Count booking được tìm thấy</h2></div></div>
+    @if (Model.Bookings.Count == 0)
+    {
+        <div class="empty-state"><span>⌕</span><h3>Chưa có booking phù hợp</h3><p>Thử kiểm tra lại số điện thoại hoặc khoảng thời gian.</p></div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="booking-table">
+                <thead><tr><th>Mã booking</th><th>Phòng</th><th>Thời gian lưu trú</th><th>Khách</th><th>Giá/đêm</th><th>Trạng thái</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var item in Model.Bookings)
+                {
+                    <tr>
+                        <td><strong>#@item.BookingId</strong><small>@item.CreatedAt.ToString("dd/MM/yyyy")</small></td>
+                        <td><strong>@item.RoomNumber</strong><small>@item.RoomType</small></td>
+                        <td>@item.CheckInDate.ToString("dd/MM/yyyy")<small>đến @item.CheckOutDate.ToString("dd/MM/yyyy")</small></td>
+                        <td>@item.GuestCount</td>
+                        <td>@item.RoomRate.ToString("N0") đ</td>
+                        <td><span class="status">@item.BookingStatus</span></td>
+                        <td>
+                            <a class="table-link" asp-action="Detail" asp-route-bookingId="@item.BookingId"
+                               asp-route-roomNumber="@item.RoomNumber" asp-route-roomType="@item.RoomType"
+                               asp-route-checkInDate="@item.CheckInDate.ToString("yyyy-MM-dd")"
+                               asp-route-checkOutDate="@item.CheckOutDate.ToString("yyyy-MM-dd")"
+                               asp-route-guestCount="@item.GuestCount" asp-route-roomRate="@item.RoomRate"
+                               asp-route-bookingStatus="@item.BookingStatus">Chi tiết →</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
