@@ -1,0 +1,30 @@
+.field select.hotel-service-select {
+    height: 46px;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #dfe2dc;
+    color: #24392f;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0 14px;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.field select.hotel-service-select:focus-visible {
+    outline: 2px solid #a6baa8;
+    outline-offset: 2px;
+    border-color: #647e6e;
+}
+.field select.hotel-service-select:disabled,
+.operation-button:disabled,
+.service-form button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+.field .hotel-service-hint {
+    font-size: 11px;
+    color: #61776a;
+    line-height: 1.5;
+    margin-top: 3px;
+}

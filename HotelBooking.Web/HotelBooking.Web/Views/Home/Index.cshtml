@@ -1,8 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="text-center py-5 mb-4 bg-primary bg-gradient text-white rounded-4">
+    <h1 class="display-4 fw-bold">Chào mừng đến với Hotel Booking</h1>
+    <p class="lead mb-4">Tìm phòng, đặt phòng chỉ vài bước và quản lý kỳ nghỉ của bạn dễ dàng.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a class="btn btn-light btn-lg px-4" asp-controller="Rooms" asp-action="Search">Tìm phòng</a>
+        <a class="btn btn-outline-light btn-lg px-4" href="/Bookings/History">Lịch sử đặt phòng</a>
+    </div>
+</section>
+
+<section class="row text-center g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">1. Tìm kiếm</h5>
+                <p class="card-text text-muted">Chọn ngày nhận phòng, ngày trả phòng và số lượng khách</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">2. Chọn phòng</h5>
+                <p class="card-text text-muted">Xem các phòng còn trống cùng loại phòng, giá mỗi đêm và sức chứa</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">3. Đặt phòng</h5>
+                <p class="card-text text-muted">Bấm Đặt ngay và hoàn tất việc đặt phòng</p>
+            </div>
+        </div>
+    </div>
+</section>

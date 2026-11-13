@@ -1,50 +1,106 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
+    var isRooms = string.Equals(currentController, "Rooms", StringComparison.OrdinalIgnoreCase);
+    var isHousekeeping = string.Equals(
+      currentController, "Housekeeping",
+      StringComparison.OrdinalIgnoreCase);
+    var isBookings = string.Equals(currentController, "Bookings", StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HotelBooking.Web</title>
+    <meta name="theme-color" content="#f9faf6" />
+    <title>@ViewData["Title"] - Hotel Booking</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HotelBooking.Web.styles.css" asp-append-version="true" />
+    <!-- UI Polish v1: giu hieu ung nut, loading, status va cards -->
+    <link rel="stylesheet" href="~/css/ui-polish.css" asp-append-version="true" />
+    <!-- Navbar Refine v2: menu, thuong hieu, back-to-home, responsive -->
+    <link rel="stylesheet" href="~/css/hotel-nav-v2.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HotelBooking.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+<body id="top">
+    <header class="hotel-header" id="hotelHeader">
+        <nav class="navbar navbar-expand-lg hotel-navbar" aria-label="Điều hướng chính">
+            <div class="container hotel-navbar-container">
+                <a class="navbar-brand hotel-brand" asp-controller="Home" asp-action="Index" aria-label="Hotel Booking - Về trang chủ">
+                    <span class="hotel-brand-mark" aria-hidden="true">H<span>B</span></span>
+                    <span class="hotel-brand-words">
+                        <span class="hotel-brand-title">HOTEL BOOKING</span>
+                        <span class="hotel-brand-subtitle">Your stay, thoughtfully arranged</span>
+                    </span>
+                </a>
+
+                <button class="navbar-toggler hotel-menu-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#hotelNavigation"
+                        aria-controls="hotelNavigation" aria-expanded="false"
+                        aria-label="Mở hoặc đóng menu">
+                    <span class="hotel-menu-lines" aria-hidden="true"><i></i><i></i><i></i></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="hotelNavigation">
+                    <ul class="navbar-nav ms-lg-auto hotel-nav-list">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link hotel-nav-link @(isHome ? "is-current" : "")"
+                               asp-controller="Home" asp-action="Index" aria-current="@(isHome ? "page" : null)">
+                                Trang chủ
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link hotel-nav-link @(isRooms ? "is-current" : "")"
+                               asp-controller="Rooms" asp-action="Search" aria-current="@(isRooms ? "page" : null)">
+                                Tìm phòng
+                            </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link hotel-nav-link @(isBookings ? "is-current" : "")"
+                               asp-controller="Bookings" asp-action="History" aria-current="@(isBookings ? "page" : null)">
+                                Lịch sử đặt phòng
+                            </a>
+                        </li>
+
+                        <a asp-controller="Housekeeping"
+                           asp-action="Index"
+                           class="nav-link">
+                            <i class="bi bi-door-open"></i>
+                            Quản lý phòng
+                        </a>
                     </ul>
+                    <a class="hotel-nav-cta" asp-controller="Rooms" asp-action="Search">
+                        Khám phá phòng <span aria-hidden="true">↗</span>
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container hotel-page-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - HotelBooking.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="hotel-footer">
+        <div class="container hotel-footer-inner">
+            <div class="hotel-footer-identity">
+                <strong>HOTEL BOOKING</strong>
+                <small>Trải nghiệm đặt phòng thuận tiện cùng Oracle 23ai.</small>
+            </div>
+            <span class="hotel-footer-copy">© @DateTime.Now.Year · Hotel Booking · Đồ án Hệ quản trị CSDL</span>
+            <a href="#top" class="hotel-back-top">Về đầu trang <span aria-hidden="true">↑</span></a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- UI Polish v1 giu chuc nang loading khi submit -->
+    <script src="~/js/ui-polish.js" asp-append-version="true"></script>
+    <script src="~/js/hotel-nav-v2.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

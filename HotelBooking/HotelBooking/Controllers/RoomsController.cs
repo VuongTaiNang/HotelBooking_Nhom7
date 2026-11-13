@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Oracle.ManagedDataAccess.Client;
 
 namespace HotelBooking.Controllers
@@ -59,6 +59,7 @@ namespace HotelBooking.Controllers
                     JOIN ROOM_TYPES RT
                         ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
                     WHERE R.STATUS <> 'MAINTENANCE'
+                      AND (R.STATUS = 'AVAILABLE' OR :P_CHECK_IN > :P_TODAY)
 
                       AND RT.MAX_GUESTS >= :P_GUESTS
 
@@ -98,6 +99,8 @@ namespace HotelBooking.Controllers
                     "P_CHECK_OUT",
                     OracleDbType.Date
                 ).Value = checkOut;
+
+                command.Parameters.Add("P_TODAY", OracleDbType.Date).Value = DateTime.Today;
 
                 var rooms = new List<object>();
 

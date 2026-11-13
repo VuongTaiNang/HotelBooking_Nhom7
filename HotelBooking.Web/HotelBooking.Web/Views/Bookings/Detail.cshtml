@@ -1,0 +1,82 @@
+@model HotelBooking.Web.Models.BookingDetailViewModel
+@{
+    ViewData["Title"] = "Booking Detail";
+    var b = Model.Booking;
+}
+<link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/booking-final-polish.css" asp-append-version="true" />
+<script src="~/js/booking-final-polish.js" asp-append-version="true" defer></script>
+<link rel="stylesheet" href="~/css/services-dropdown.css" asp-append-version="true" />
+<script src="~/js/services-dropdown.js" asp-append-version="true" defer></script>
+<section class="page-heading">
+    <a asp-action="History" class="eyebrow-link">← Lịch sử booking</a>
+    <p class="eyebrow">BOOKING OPERATIONS</p>
+    <h1>Booking <span class="muted">#@b.BookingId</span></h1>
+    <p>Thông tin đặt phòng và các thao tác vận hành.</p>
+</section>
+@if (TempData["Success"] is string success) { <div class="notice success">@success</div> }
+@if (TempData["Error"] is string error) { <div class="notice error">@error</div> }
+<div class="detail-grid">
+    <div class="form-card detail-card">
+        <div class="detail-top"><div><p class="eyebrow">THÔNG TIN LƯU TRÚ</p><h2>Phòng @b.RoomNumber</h2></div><span class="status">@b.BookingStatus</span></div>
+        <div class="detail-facts">
+            <div><small>Loại phòng</small><strong>@b.RoomType</strong></div>
+            <div><small>Số khách</small><strong>@b.GuestCount người</strong></div>
+            <div><small>Check-in</small><strong>@(b.CheckInDate == DateTime.MinValue ? "—" : b.CheckInDate.ToString("dd/MM/yyyy"))</strong></div>
+            <div><small>Check-out</small><strong>@(b.CheckOutDate == DateTime.MinValue ? "—" : b.CheckOutDate.ToString("dd/MM/yyyy"))</strong></div>
+            <div><small>Giá phòng/đêm</small><strong>@b.RoomRate.ToString("N0") đ</strong></div>
+            <div><small>Mã booking</small><strong>#@b.BookingId</strong></div>
+        </div>
+        @if (TempData["TotalAmount"] is string total)
+        {
+            <div class="total-panel"><small>TỔNG TIỀN HIỆN TẠI</small><strong>@total đ</strong></div>
+        }
+    </div>
+    <div class="form-card operations-card">
+        <p class="eyebrow">QUẢN LÝ ĐẶT PHÒNG</p><h2>Thao tác</h2>
+        <div class="operation-list">
+            @foreach (var op in new[] { ("confirm", "Confirm", "Xác nhận booking"), ("cancel", "Cancel", "Hủy booking"), ("check-in", "Check-in", "Nhận phòng"), ("check-out", "Check-out", "Trả phòng") })
+            {
+                <form asp-action="Operation" method="post">
+                                <input type="hidden" name="bookingId" value="@b.BookingId" />
+                    <input type="hidden" name="operation" value="@op.Item1" />
+                    <input type="hidden" name="roomNumber" value="@b.RoomNumber" />
+            <input type="hidden" name="roomType" value="@b.RoomType" />
+            <input type="hidden" name="checkInDate" value="@(b.CheckInDate == DateTime.MinValue ? "" : b.CheckInDate.ToString("yyyy-MM-dd"))" />
+            <input type="hidden" name="checkOutDate" value="@(b.CheckOutDate == DateTime.MinValue ? "" : b.CheckOutDate.ToString("yyyy-MM-dd"))" />
+            <input type="hidden" name="guestCount" value="@b.GuestCount" />
+            <input type="hidden" name="roomRate" value="@b.RoomRate" />
+            <input type="hidden" name="bookingStatus" value="@b.BookingStatus" />
+                    <button class="operation-button" type="submit"><span><strong>@op.Item2</strong><small>@op.Item3</small></span><b>→</b></button>
+                </form>
+            }
+        </div>
+        <form asp-action="CalculateTotal" method="post" class="mt-3">
+                <input type="hidden" name="bookingId" value="@b.BookingId" />
+            <input type="hidden" name="roomNumber" value="@b.RoomNumber" />
+            <input type="hidden" name="roomType" value="@b.RoomType" />
+            <input type="hidden" name="checkInDate" value="@(b.CheckInDate == DateTime.MinValue ? "" : b.CheckInDate.ToString("yyyy-MM-dd"))" />
+            <input type="hidden" name="checkOutDate" value="@(b.CheckOutDate == DateTime.MinValue ? "" : b.CheckOutDate.ToString("yyyy-MM-dd"))" />
+            <input type="hidden" name="guestCount" value="@b.GuestCount" />
+            <input type="hidden" name="roomRate" value="@b.RoomRate" />
+            <input type="hidden" name="bookingStatus" value="@b.BookingStatus" />
+            <button class="btn btn-primary full-width" type="submit">Calculate Total</button>
+        </form>
+    </div>
+</div>
+<div class="form-card service-card">
+    <p class="eyebrow">DỊCH VỤ PHÁT SINH</p><h2>Add Service</h2>
+    <form asp-action="AddService" method="post" class="service-form">
+        <input type="hidden" name="bookingId" value="@b.BookingId" />
+        <input type="hidden" name="roomNumber" value="@b.RoomNumber" />
+            <input type="hidden" name="roomType" value="@b.RoomType" />
+            <input type="hidden" name="checkInDate" value="@(b.CheckInDate == DateTime.MinValue ? "" : b.CheckInDate.ToString("yyyy-MM-dd"))" />
+            <input type="hidden" name="checkOutDate" value="@(b.CheckOutDate == DateTime.MinValue ? "" : b.CheckOutDate.ToString("yyyy-MM-dd"))" />
+            <input type="hidden" name="guestCount" value="@b.GuestCount" />
+            <input type="hidden" name="roomRate" value="@b.RoomRate" />
+            <input type="hidden" name="bookingStatus" value="@b.BookingStatus" />
+        <div class="field"><label for="serviceId">Chọn dịch vụ</label><input id="serviceId" name="serviceId" type="number" min="1" required placeholder="Nhập ID dịch vụ" /></div>
+        <div class="field"><label for="quantity">Số lượng</label><input id="quantity" name="quantity" type="number" min="1" value="1" required /></div>
+        <button class="btn btn-primary" type="submit">Thêm dịch vụ</button>
+    </form>
+</div>

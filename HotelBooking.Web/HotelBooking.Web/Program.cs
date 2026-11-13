@@ -19,6 +19,15 @@ namespace HotelBooking.Web
                 client.BaseAddress = new Uri(baseUrl!);
             });
 
+            // Đăng ký RoomApiService để RoomsController dùng được
+            builder.Services.AddHttpClient<RoomApiService>(client =>
+            {
+                var baseUrl =
+                    builder.Configuration["ApiSettings:BaseUrl"];
+
+                client.BaseAddress = new Uri(baseUrl!);
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

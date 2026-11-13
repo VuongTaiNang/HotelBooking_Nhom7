@@ -1,0 +1,70 @@
+﻿@model HotelBooking.Web.Models.SearchRoomsViewModel
+@{
+    ViewData["Title"] = "Tìm phòng";
+    var today = DateTime.Today.ToString("yyyy-MM-dd");
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="mb-4">Tìm phòng</h2>
+
+                <form asp-controller="Rooms" asp-action="Available" method="get">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="CheckIn" class="form-label"></label>
+                        <input asp-for="CheckIn" class="form-control" min="@today" />
+                        <span asp-validation-for="CheckIn" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CheckOut" class="form-label"></label>
+                        <input asp-for="CheckOut" class="form-control" min="@today" />
+                        <span asp-validation-for="CheckOut" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Guests" class="form-label"></label>
+                        <input asp-for="Guests" type="number" min="1" max="20" class="form-control" />
+                        <span asp-validation-for="Guests" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var checkIn = document.getElementById("CheckIn");
+            var checkOut = document.getElementById("CheckOut");
+
+            function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+            function addDays(iso, n) {
+                var p = iso.split("-");
+                var d = new Date(+p[0], +p[1] - 1, +p[2] + n);
+                return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+            }
+
+            // Ngày trả phòng nhỏ nhất = ngày nhận + 1, và tự nhảy sang ngày đó
+            function syncCheckOut() {
+                if (!checkIn.value) return;
+                var next = addDays(checkIn.value, 1);
+                checkOut.min = next;
+                checkOut.value = next;
+            }
+
+            checkIn.addEventListener("change", syncCheckOut);
+
+            if (checkIn.value) {
+                checkOut.min = addDays(checkIn.value, 1);
+            }
+        })();
+    </script>
+}
