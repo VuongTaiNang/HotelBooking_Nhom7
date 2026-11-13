@@ -4,6 +4,10 @@
     var b = Model.Booking;
 }
 <link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/booking-final-polish.css" asp-append-version="true" />
+<script src="~/js/booking-final-polish.js" asp-append-version="true" defer></script>
+<link rel="stylesheet" href="~/css/services-dropdown.css" asp-append-version="true" />
+<script src="~/js/services-dropdown.js" asp-append-version="true" defer></script>
 <section class="page-heading">
     <a asp-action="History" class="eyebrow-link">← Lịch sử booking</a>
     <p class="eyebrow">BOOKING OPERATIONS</p>
@@ -71,7 +75,7 @@
             <input type="hidden" name="guestCount" value="@b.GuestCount" />
             <input type="hidden" name="roomRate" value="@b.RoomRate" />
             <input type="hidden" name="bookingStatus" value="@b.BookingStatus" />
-        <div class="field"><label for="serviceId">Service ID</label><input id="serviceId" name="serviceId" type="number" min="1" required placeholder="Nhập ID dịch vụ" /></div>
+        <div class="field"><label for="serviceId">Chọn dịch vụ</label><input id="serviceId" name="serviceId" type="number" min="1" required placeholder="Nhập ID dịch vụ" /></div>
         <div class="field"><label for="quantity">Số lượng</label><input id="quantity" name="quantity" type="number" min="1" value="1" required /></div>
         <button class="btn btn-primary" type="submit">Thêm dịch vụ</button>
     </form>

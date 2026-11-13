@@ -1,4 +1,4 @@
-﻿using HotelBooking.DTOs;
+using HotelBooking.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
@@ -66,6 +66,11 @@ namespace HotelBooking.Controllers
 
                 using var transaction =
                     connection.BeginTransaction();
+                // Cung quy tac booking trong ngay cho API cu (CustomerId).
+                var readiness = await HotelBooking.Services.RoomReadinessGuard.CheckForBookingAsync(
+                    connection, transaction, request.RoomId, request.CheckInDate.Date);
+                if (!readiness.Allowed)
+                    return Conflict(new { success = false, message = readiness.Message });
 
                 try
                 {

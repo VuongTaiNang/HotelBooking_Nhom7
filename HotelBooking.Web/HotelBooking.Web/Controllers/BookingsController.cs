@@ -13,40 +13,51 @@ public sealed class BookingsController : Controller
     public BookingsController(HotelApiService api) => _api = api;
 
     [HttpGet]
-    public IActionResult Create(int roomId, DateTime? checkIn = null, DateTime? checkOut = null, int? guests = null)
+    public async Task<IActionResult> Create(int roomId, DateTime? checkIn = null,
+        DateTime? checkOut = null, int? guests = null,
+        CancellationToken cancellationToken = default)
     {
         if (roomId <= 0) return BadRequest("Room ID không hợp lệ.");
-
         var arrival = checkIn?.Date ?? DateTime.Today.AddDays(1);
-        var departure = checkOut?.Date ?? arrival.AddDays(1);
-        return View(new CreateBookingViewModel
+        var model = new CreateBookingViewModel
         {
             RoomId = roomId,
             CheckInDate = arrival,
-            CheckOutDate = departure,
+            CheckOutDate = checkOut?.Date ?? arrival.AddDays(1),
             GuestCount = guests is > 0 ? guests.Value : 1
-        });
+        };
+        await FillRoomInfo(model, cancellationToken);
+        return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateBookingViewModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateBookingViewModel model,
+        CancellationToken cancellationToken)
     {
+        model.FullName = model.FullName?.Trim() ?? "";
+        model.Phone = model.Phone?.Trim() ?? "";
         if (model.CheckOutDate.Date <= model.CheckInDate.Date)
             ModelState.AddModelError(nameof(model.CheckOutDate), "Check-out phải sau check-in.");
+        if (model.CheckInDate.Date < DateTime.Today)
+            ModelState.AddModelError(nameof(model.CheckInDate), "Ngày nhận phòng không được trong quá khứ.");
 
+        // Tải dữ liệu phòng từ API, không tin thông tin giá do client gửi.
+        await FillRoomInfo(model, cancellationToken);
         if (!ModelState.IsValid) return View(model);
 
         try
         {
-            var result = await _api.PostAsync<ApiResult>("api/bookings", new CreateBookingApiRequest
-            {
-                CustomerId = model.CustomerId,
-                RoomId = model.RoomId,
-                CheckInDate = model.CheckInDate.Date,
-                CheckOutDate = model.CheckOutDate.Date,
-                GuestCount = model.GuestCount
-            }, cancellationToken);
+            var result = await _api.PostAsync<BookingCheckoutResult>(
+                "api/booking-checkout", new CreateBookingByCustomerRequest
+                {
+                    FullName = model.FullName,
+                    Phone = model.Phone,
+                    RoomId = model.RoomId,
+                    CheckInDate = model.CheckInDate.Date,
+                    CheckOutDate = model.CheckOutDate.Date,
+                    GuestCount = model.GuestCount
+                }, cancellationToken);
 
             if (result?.Success == true)
             {
@@ -54,22 +65,43 @@ public sealed class BookingsController : Controller
                 return RedirectToAction(nameof(Detail), new
                 {
                     bookingId = result.BookingId,
-                    roomNumber = "—",
-                    roomType = "Đặt phòng mới",
+                    roomNumber = result.RoomNumber,
+                    roomType = result.RoomType,
                     checkInDate = model.CheckInDate.ToString("yyyy-MM-dd"),
                     checkOutDate = model.CheckOutDate.ToString("yyyy-MM-dd"),
                     guestCount = model.GuestCount,
-                    roomRate = 0,
+                    roomRate = result.RoomRate,
                     bookingStatus = "PENDING"
                 });
             }
-
             ModelState.AddModelError("", result?.Message ?? "Không thể tạo booking.");
         }
-        catch (HotelApiException ex) { ModelState.AddModelError("", ex.Message); }
-        catch (HttpRequestException) { ModelState.AddModelError("", "Không thể kết nối HotelBooking API. Kiểm tra backend/Dev Tunnel."); }
+        catch (HotelApiException ex) { ModelState.AddModelError("", BookingErrorMessages.Friendly(ex.Message)); }
+        catch (HttpRequestException) { ModelState.AddModelError("", "Không thể kết nối HotelBooking API."); }
 
         return View(model);
+    }
+
+    private async Task FillRoomInfo(CreateBookingViewModel model, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var room = await _api.GetAsync<RoomCheckoutInfo>(
+                $"api/booking-checkout/rooms/{model.RoomId}", cancellationToken);
+            if (room is null)
+            {
+                ModelState.AddModelError("", "Không lấy được thông tin phòng.");
+                return;
+            }
+            model.RoomNumber = room.RoomNumber;
+            model.RoomType = room.RoomType;
+            model.RoomRate = room.PricePerNight;
+            if (model.GuestCount > room.MaxGuests)
+                ModelState.AddModelError(nameof(model.GuestCount),
+                    $"Phòng này chỉ nhận tối đa {room.MaxGuests} khách.");
+        }
+        catch (HotelApiException ex) { ModelState.AddModelError("", BookingErrorMessages.Friendly(ex.Message)); }
+        catch (HttpRequestException) { ModelState.AddModelError("", "Không tải được thông tin phòng từ API."); }
     }
 
     [HttpGet]
@@ -166,7 +198,7 @@ public sealed class BookingsController : Controller
         }
         catch (HotelApiException ex)
         {
-            TempData["Error"] = ex.Message;
+            TempData["Error"] = BookingErrorMessages.Friendly(ex.Message);
         }
         catch (HttpRequestException)
         {
@@ -202,7 +234,7 @@ public sealed class BookingsController : Controller
             EnsureApiSuccess(result, "Backend không thể thêm dịch vụ.");
             TempData["Success"] = result?.Message ?? "Đã thêm dịch vụ.";
         }
-        catch (HotelApiException ex) { TempData["Error"] = ex.Message; }
+        catch (HotelApiException ex) { TempData["Error"] = BookingErrorMessages.Friendly(ex.Message); }
         catch (HttpRequestException) { TempData["Error"] = "Không thể kết nối HotelBooking API."; }
         return RedirectToAction(nameof(Detail), new { bookingId, roomNumber, roomType, checkInDate, checkOutDate, guestCount, roomRate, bookingStatus });
     }
@@ -221,7 +253,7 @@ public sealed class BookingsController : Controller
             TempData["TotalAmount"] = result?.TotalAmount.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) ?? "Không có dữ liệu";
             TempData["Success"] = "Đã tính tổng booking.";
         }
-        catch (HotelApiException ex) { TempData["Error"] = ex.Message; }
+        catch (HotelApiException ex) { TempData["Error"] = BookingErrorMessages.Friendly(ex.Message); }
         catch (HttpRequestException) { TempData["Error"] = "Không thể kết nối HotelBooking API."; }
         return RedirectToAction(nameof(Detail), new { bookingId, roomNumber, roomType, checkInDate, checkOutDate, guestCount, roomRate, bookingStatus });
     }

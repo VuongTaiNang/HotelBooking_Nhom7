@@ -1,0 +1,60 @@
+@model HotelBooking.Web.Models.HousekeepingIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý dọn phòng";
+}
+<link rel="stylesheet" href="~/css/housekeeping.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/booking-final-polish.css" asp-append-version="true" />
+<script src="~/js/booking-final-polish.js" asp-append-version="true" defer></script>
+<div class="hk-page">
+    <div class="hk-head">
+        <div>
+            <span class="hk-eyebrow">HOUSEKEEPING · QUẢN LÝ NỘI BỘ (DEMO)</span>
+            <h1>Phòng cần dọn</h1>
+            <p>Chỉ xác nhận sau khi nhân viên kiểm tra phòng đã sạch và sẵn sàng đón khách.</p>
+        </div>
+        <a asp-controller="Home" asp-action="Index" class="hk-back">← Trang chủ</a>
+    </div>
+
+    @if (TempData["Success"] is string success)
+    {
+        <div class="hk-notice hk-success" role="status">✓ @success</div>
+    }
+    @if (TempData["Error"] is string error)
+    {
+        <div class="hk-notice hk-error" role="alert">@error</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <div class="hk-notice hk-error" role="alert">@Model.Error</div>
+    }
+    else if (Model.Rooms.Count == 0)
+    {
+        <div class="hk-empty">
+            <strong>Không có phòng đang dọn</strong>
+            <p>Các phòng đã hoàn tất dọn sẽ không còn xuất hiện trong danh sách này.</p>
+        </div>
+    }
+    else
+    {
+        <p class="hk-count">Có <strong>@Model.Rooms.Count</strong> phòng đang chờ dọn xong.</p>
+        <div class="hk-grid">
+            @foreach (var room in Model.Rooms)
+            {
+                <div class="hk-card">
+                    <span class="hk-status">● ĐANG DỌN</span>
+                    <h2>Phòng @room.RoomNumber</h2>
+                    <div class="hk-type">@room.TypeName · Mã phòng @room.RoomId</div>
+                    <p>Nhân viên xác nhận đã kiểm tra phòng trước khi mở nhận khách.</p>
+                    <form asp-controller="Housekeeping" asp-action="Complete" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="roomId" value="@room.RoomId" />
+                        <button type="submit" class="hk-button" onclick="return confirm('Bạn xác nhận phòng đã dọn xong và sẵn sàng nhận khách?');">
+                            ✓ Hoàn tất dọn phòng
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+    <p class="hk-footnote">Dành cho môi trường demo nội bộ. Mỗi lần xác nhận sẽ ghi thời điểm vào ROOM_HOUSEKEEPING_LOG trong Oracle.</p>
+</div>

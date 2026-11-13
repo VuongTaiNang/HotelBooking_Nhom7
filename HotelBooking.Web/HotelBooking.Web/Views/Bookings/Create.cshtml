@@ -1,25 +1,40 @@
 @model HotelBooking.Web.Models.CreateBookingViewModel
 @{
-    ViewData["Title"] = "Create Booking";
+    ViewData["Title"] = "Đặt phòng";
 }
 <link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
 <section class="page-heading">
     <a asp-controller="Home" asp-action="Index" class="eyebrow-link">← Trang chủ</a>
     <p class="eyebrow">ĐẶT PHÒNG</p>
-    <h1>Tạo booking</h1>
-    <p>Điền thông tin khách hàng và thời gian lưu trú để hoàn tất đặt phòng.</p>
+    <h1>Thông tin đặt phòng</h1>
+    <p>Nhập họ tên và số điện thoại. Hệ thống sẽ tự liên kết hồ sơ khách hàng trong Oracle.</p>
 </section>
 <div class="form-card">
-    <div class="room-id-chip">ROOM ID <strong>#@Model.RoomId</strong></div>
-    <form asp-action="Create" method="post">
+    <div class="room-id-chip">
+        PHÒNG ĐÃ CHỌN
+        <strong>Phòng @(Model.RoomNumber ?? "đang tải") – @(Model.RoomType ?? "")</strong>
+        @if (Model.RoomRate > 0)
+        {
+            <strong>· @Model.RoomRate.ToString("N0") đ/đêm</strong>
+        }
+    </div>
+    <form asp-controller="Bookings" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
         <input asp-for="RoomId" type="hidden" />
         <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
         <div class="form-grid">
             <div class="field">
-                <label asp-for="CustomerId"></label>
-                <input asp-for="CustomerId" type="number" min="1" placeholder="Nhập Customer ID" />
-                <span asp-validation-for="CustomerId"></span>
-                <small>Nhập ID khách hàng đã có trong hệ thống.</small>
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" autocomplete="name" maxlength="100"
+                       placeholder="Ví dụ: Nguyễn Văn An" />
+                <span asp-validation-for="FullName"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" type="tel" inputmode="numeric" autocomplete="tel"
+                       maxlength="10" placeholder="09xxxxxxxx" />
+                <span asp-validation-for="Phone"></span>
+                <small>Nếu số điện thoại đã tồn tại, vui lòng dùng đúng họ tên đã đăng ký.</small>
             </div>
             <div class="field">
                 <label asp-for="GuestCount"></label>
@@ -38,7 +53,7 @@
             </div>
         </div>
         <div class="form-actions">
-            <a asp-controller="Home" asp-action="Index" class="btn btn-quiet">Hủy</a>
+            <a asp-controller="Rooms" asp-action="Search" class="btn btn-quiet">Chọn phòng khác</a>
             <button class="btn btn-primary" type="submit">Xác nhận đặt phòng <span>→</span></button>
         </div>
     </form>

@@ -1,0 +1,72 @@
+/* Booking Detail: field/service selector alignment without changing business logic */
+.service-card .service-form {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  column-gap: 16px;
+  row-gap: 10px;
+  align-items: start !important;
+}
+.service-card .service-form > .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: none;
+  min-width: 0;
+}
+.service-card .service-form > .field label {
+  font-size: 11px;
+  line-height: 16px;
+  margin: 0;
+  font-weight: 700;
+}
+.service-card .service-form .field input,
+.service-card .service-form .field select,
+.service-card .service-form select.hotel-service-select {
+  width: 100%;
+  height: 46px;
+  min-height: 46px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border: 1px solid #dfe2dc;
+  border-radius: 6px;
+  background: white;
+  font: inherit;
+}
+.service-card .service-form > button[type="submit"] {
+  height: 46px;
+  min-height: 46px;
+  margin-top: 24px;
+  align-self: start;
+  white-space: nowrap;
+}
+.service-card .hotel-service-hint {color:#728177; font-size:11px; line-height:1.5;}
+.service-card .service-form :disabled {cursor:not-allowed; opacity:.65;}
+/* Notice with dismiss action and short auto-dismiss */
+.notice.hotel-notice,
+.hk-notice.hotel-notice {
+  position: relative;
+  padding: 16px 55px 16px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(35,66,52,.09);
+  box-shadow: 0 8px 24px rgba(35,66,52,.06);
+  transition: opacity .28s ease, transform .28s ease;
+}
+.hotel-notice .hotel-notice-close {
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  background:transparent;
+  border:0;
+  padding:6px 8px;
+  font-size:21px;
+  line-height:1;
+  color:inherit;
+  cursor:pointer;
+}
+.hotel-notice.hotel-notice-leaving {opacity:0;transform:translateY(-7px);}
+@media (max-width: 700px) {
+  .service-card .service-form {grid-template-columns: minmax(0, 1fr);}
+  .service-card .service-form > button[type="submit"] {margin-top: 0; width:100%;}
+}
+@media (prefers-reduced-motion: reduce){.hotel-notice{transition:none!important}}

@@ -1,0 +1,171 @@
+/* HotelBooking UI Polish v1 – cosmetic-only enhancements.
+   Does not change API calls, routes or Oracle business logic. */
+:root {
+  --hotel-green: #304c41;
+  --hotel-green-deep: #203a30;
+  --hotel-gold: #b99b69;
+  --hotel-paper: #fbfbf8;
+  --hotel-text: #26372f;
+  --hotel-shadow: 0 13px 32px rgba(25, 49, 36, 0.12);
+}
+
+/* Use the same boutique-hotel palette on the room-search pages as on Booking. */
+.btn-primary {
+  --bs-btn-bg: var(--hotel-green);
+  --bs-btn-border-color: var(--hotel-green);
+  --bs-btn-hover-bg: var(--hotel-green-deep);
+  --bs-btn-hover-border-color: var(--hotel-green-deep);
+  --bs-btn-active-bg: var(--hotel-green-deep);
+  --bs-btn-active-border-color: var(--hotel-green-deep);
+  --bs-btn-focus-shadow-rgb: 48, 76, 65;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--hotel-green);
+  --bs-btn-border-color: var(--hotel-green);
+  --bs-btn-hover-bg: var(--hotel-green);
+  --bs-btn-hover-border-color: var(--hotel-green);
+  --bs-btn-active-bg: var(--hotel-green-deep);
+  --bs-btn-active-border-color: var(--hotel-green-deep);
+}
+
+/* The Home hero uses Bootstrap's important bg-gradient utility. */
+section.bg-primary.bg-gradient {
+  background: linear-gradient(120deg, #203c31 0%, #3b6755 76%, #6e8565 100%) !important;
+}
+
+/* Gentle entrance; useful on both search and operations pages. */
+main[role="main"] {
+  animation: hotel-page-in .42s ease both;
+}
+@keyframes hotel-page-in {
+  from { opacity: .55; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons – lift on hover, press on click, visible keyboard focus. */
+.btn,
+.operation-button,
+.btn-nav {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .2s ease, box-shadow .2s ease,
+              background-color .2s ease, border-color .2s ease,
+              color .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:not(:disabled):not(.disabled):hover,
+.btn-nav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 20px rgba(33, 63, 48, .18);
+}
+.operation-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  border-color: #a8b9ae;
+  background: #f2f6f2;
+  box-shadow: 0 8px 22px rgba(33, 63, 48, .12);
+}
+.operation-button:not(:disabled):hover > b { transform: translateX(5px); }
+.operation-button > b { transition: transform .2s ease; }
+.btn:not(:disabled):active,
+.operation-button:not(:disabled):active,
+.btn-nav:active {
+  transform: translateY(1px) scale(.985);
+  box-shadow: 0 2px 7px rgba(33, 63, 48, .12);
+}
+.btn:focus-visible,
+.operation-button:focus-visible,
+.btn-nav:focus-visible,
+.nav-link:focus-visible,
+.table-link:focus-visible {
+  outline: 3px solid var(--hotel-gold);
+  outline-offset: 3px;
+}
+
+/* Visual feedback for POST forms; the text of each button stays unchanged. */
+.btn.is-processing,
+.operation-button.is-processing {
+  pointer-events: none;
+  opacity: .83;
+  cursor: progress;
+}
+.btn.is-processing::after,
+.operation-button.is-processing::after {
+  content: "";
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  margin-left: 10px;
+  animation: hotel-spin .65s linear infinite;
+}
+@keyframes hotel-spin { to { transform: rotate(360deg); } }
+.hotel-ripple {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .2;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  animation: hotel-ripple .5s ease-out forwards;
+}
+@keyframes hotel-ripple {
+  to { transform: translate(-50%, -50%) scale(14); opacity: 0; }
+}
+
+/* Bring the rooms cards and booking lists to the same design language. */
+.card {
+  --bs-card-border-radius: 13px;
+  --bs-card-inner-border-radius: 13px;
+  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--hotel-shadow) !important;
+  border-color: #d7e1d8;
+}
+.form-card {
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.form-card:hover { box-shadow: 0 16px 38px rgba(32, 43, 40, .065); }
+.booking-table tbody tr {
+  transition: background-color .18s ease;
+}
+.booking-table tbody tr:hover { background: #f5f8f4; }
+.table-link:hover, .eyebrow-link:hover { color: #866d40; text-decoration: underline; }
+
+/* Cleaner site navigation, without changing the MVC routing. */
+.navbar .nav-link {
+  transition: color .2s ease, transform .2s ease;
+}
+.navbar .nav-link:hover {
+  color: var(--hotel-green) !important;
+  transform: translateY(-1px);
+}
+.navbar .navbar-brand { color: var(--hotel-text); }
+
+/* Booking status colors are applied by the optional JS enhancer. */
+.status.hotel-status--pending { background: #fff3dd; color: #916022; }
+.status.hotel-status--confirmed { background: #e7f2e9; color: #2f6544; }
+.status.hotel-status--checked_in { background: #e7f0ff; color: #315d9a; }
+.status.hotel-status--checked_out { background: #e8eee9; color: #3f6150; }
+.status.hotel-status--cancelled { background: #f9e8e8; color: #9a4242; }
+.notice { animation: hotel-notice-in .28s ease both; }
+@keyframes hotel-notice-in {
+  from { opacity: 0; transform: translateY(-7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

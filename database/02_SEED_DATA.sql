@@ -1,0 +1,686 @@
+-- ============================================================
+-- PROJECT: HOTEL BOOKING MANAGEMENT SYSTEM
+-- SCHEMA: HOTEL_PROJECT
+-- SCRIPT: 02_SEED_DATA.sql
+-- PURPOSE: INSERT SAMPLE DATA FOR TESTING AND DEMONSTRATION
+-- ============================================================
+
+
+-- ============================================================
+-- 1. CUSTOMERS
+-- ============================================================
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Nguyen Van An', '0901000001', 'an@gmail.com',
+     '079206000001', DATE '2000-05-12');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Tran Thi Binh', '0901000002', 'binh@gmail.com',
+     '079206000002', DATE '1998-08-20');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Le Minh Chau', '0901000003', 'chau@gmail.com',
+     '079206000003', DATE '2001-03-15');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Pham Hoang Duy', '0901000004', 'duy@gmail.com',
+     '079206000004', DATE '1997-11-09');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Vo Ngoc Ha', '0901000005', 'ha@gmail.com',
+     '079206000005', DATE '2002-07-01');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Dang Quoc Huy', '0901000006', 'huy@gmail.com',
+     '079206000006', DATE '1999-04-25');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Bui Thanh Lan', '0901000007', 'lan@gmail.com',
+     '079206000007', DATE '2000-12-18');
+
+INSERT INTO CUSTOMERS
+    (FULL_NAME, PHONE, EMAIL, IDENTITY_NUMBER, DATE_OF_BIRTH)
+VALUES
+    ('Do Gia Minh', '0901000008', 'minh@gmail.com',
+     '079206000008', DATE '1996-06-30');
+
+
+-- ============================================================
+-- 2. ROOM TYPES
+-- ============================================================
+
+INSERT INTO ROOM_TYPES
+    (TYPE_NAME, DESCRIPTION, PRICE_PER_NIGHT, MAX_GUESTS)
+VALUES
+    ('Standard',
+     'Basic room for one or two guests',
+     700000,
+     2);
+
+INSERT INTO ROOM_TYPES
+    (TYPE_NAME, DESCRIPTION, PRICE_PER_NIGHT, MAX_GUESTS)
+VALUES
+    ('Deluxe',
+     'Comfortable room with additional facilities',
+     1200000,
+     3);
+
+INSERT INTO ROOM_TYPES
+    (TYPE_NAME, DESCRIPTION, PRICE_PER_NIGHT, MAX_GUESTS)
+VALUES
+    ('Suite',
+     'Premium room with large living space',
+     2200000,
+     4);
+
+INSERT INTO ROOM_TYPES
+    (TYPE_NAME, DESCRIPTION, PRICE_PER_NIGHT, MAX_GUESTS)
+VALUES
+    ('Family',
+     'Large room suitable for families',
+     1800000,
+     5);
+
+
+-- ============================================================
+-- 3. ROOMS
+-- ============================================================
+
+-- Standard
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '101',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Standard'),
+        1,
+        'AVAILABLE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '102',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Standard'),
+        1,
+        'AVAILABLE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '103',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Standard'),
+        1,
+        'AVAILABLE'
+    );
+
+-- Deluxe
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '201',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Deluxe'),
+        2,
+        'AVAILABLE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '202',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Deluxe'),
+        2,
+        'AVAILABLE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '203',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Deluxe'),
+        2,
+        'AVAILABLE'
+    );
+
+-- Suite
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '301',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Suite'),
+        3,
+        'OCCUPIED'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '302',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Suite'),
+        3,
+        'AVAILABLE'
+    );
+
+-- Family
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '401',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Family'),
+        4,
+        'AVAILABLE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '402',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Family'),
+        4,
+        'MAINTENANCE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '403',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Family'),
+        4,
+        'AVAILABLE'
+    );
+
+INSERT INTO ROOMS
+    (ROOM_NUMBER, ROOM_TYPE_ID, FLOOR_NUMBER, STATUS)
+VALUES
+    (
+        '404',
+        (SELECT ROOM_TYPE_ID
+         FROM ROOM_TYPES
+         WHERE TYPE_NAME = 'Family'),
+        4,
+        'AVAILABLE'
+    );
+
+
+-- ============================================================
+-- 4. SERVICES
+-- ============================================================
+
+INSERT INTO SERVICES
+    (SERVICE_NAME, DESCRIPTION, UNIT_PRICE)
+VALUES
+    ('Breakfast', 'Breakfast service per guest', 150000);
+
+INSERT INTO SERVICES
+    (SERVICE_NAME, DESCRIPTION, UNIT_PRICE)
+VALUES
+    ('Laundry', 'Laundry service', 100000);
+
+INSERT INTO SERVICES
+    (SERVICE_NAME, DESCRIPTION, UNIT_PRICE)
+VALUES
+    ('Minibar', 'Minibar items', 80000);
+
+INSERT INTO SERVICES
+    (SERVICE_NAME, DESCRIPTION, UNIT_PRICE)
+VALUES
+    ('Airport Pickup', 'Airport pickup service', 300000);
+
+INSERT INTO SERVICES
+    (SERVICE_NAME, DESCRIPTION, UNIT_PRICE)
+VALUES
+    ('Spa', 'Hotel spa service', 500000);
+
+INSERT INTO SERVICES
+    (SERVICE_NAME, DESCRIPTION, UNIT_PRICE)
+VALUES
+    ('Extra Bed', 'Additional bed service', 250000);
+
+
+-- ============================================================
+-- 5. BOOKINGS
+-- ============================================================
+--booking 1: CONFIRMED
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) + 5,
+    TRUNC(SYSDATE) + 8,
+    2,
+    RT.PRICE_PER_NIGHT,
+    'CONFIRMED'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '101'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000001';
+
+--booking 2: PENDING
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) + 8,
+    TRUNC(SYSDATE) + 10,
+    1,
+    RT.PRICE_PER_NIGHT,
+    'PENDING'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '101'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000002';
+
+
+--booking 3: cancelled
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) + 3,
+    TRUNC(SYSDATE) + 6,
+    2,
+    RT.PRICE_PER_NIGHT,
+    'CANCELLED'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '201'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000003';
+
+
+--booking 4: checkin
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) - 1,
+    TRUNC(SYSDATE) + 2,
+    2,
+    RT.PRICE_PER_NIGHT,
+    'CHECKED_IN'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '301'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000004';
+
+
+--booking 5: checkout
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) - 10,
+    TRUNC(SYSDATE) - 7,
+    2,
+    RT.PRICE_PER_NIGHT,
+    'CHECKED_OUT'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '102'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000005';
+
+
+--booking 6: confirmed
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) + 1,
+    TRUNC(SYSDATE) + 4,
+    3,
+    RT.PRICE_PER_NIGHT,
+    'CONFIRMED'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '202'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000006';
+
+
+--booking 7: family room
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) + 12,
+    TRUNC(SYSDATE) + 15,
+    4,
+    RT.PRICE_PER_NIGHT,
+    'PENDING'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '401'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000007';
+
+
+--booking 8: deluxe
+INSERT INTO BOOKINGS (
+    CUSTOMER_ID,
+    ROOM_ID,
+    CHECK_IN_DATE,
+    CHECK_OUT_DATE,
+    GUEST_COUNT,
+    ROOM_RATE,
+    BOOKING_STATUS
+)
+SELECT
+    C.CUSTOMER_ID,
+    R.ROOM_ID,
+    TRUNC(SYSDATE) + 20,
+    TRUNC(SYSDATE) + 23,
+    2,
+    RT.PRICE_PER_NIGHT,
+    'CONFIRMED'
+FROM CUSTOMERS C
+JOIN ROOMS R
+    ON R.ROOM_NUMBER = '203'
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+WHERE C.PHONE = '0901000008';
+
+
+SELECT
+    B.BOOKING_ID,
+    C.FULL_NAME,
+    R.ROOM_NUMBER,
+    B.CHECK_IN_DATE,
+    B.CHECK_OUT_DATE,
+    B.GUEST_COUNT,
+    B.ROOM_RATE,
+    B.BOOKING_STATUS
+FROM BOOKINGS B
+JOIN CUSTOMERS C
+    ON B.CUSTOMER_ID = C.CUSTOMER_ID
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+ORDER BY B.BOOKING_ID;
+
+
+
+-- ============================================================
+-- 6. BOOKING SERVICES
+-- ============================================================
+
+INSERT INTO BOOKING_SERVICES (
+    BOOKING_ID,
+    SERVICE_ID,
+    QUANTITY,
+    UNIT_PRICE
+)
+SELECT
+    B.BOOKING_ID,
+    S.SERVICE_ID,
+    2,
+    S.UNIT_PRICE
+FROM BOOKINGS B
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+CROSS JOIN SERVICES S
+WHERE R.ROOM_NUMBER = '301'
+  AND B.BOOKING_STATUS = 'CHECKED_IN'
+  AND S.SERVICE_NAME = 'Breakfast';
+
+--minibar
+INSERT INTO BOOKING_SERVICES (
+    BOOKING_ID,
+    SERVICE_ID,
+    QUANTITY,
+    UNIT_PRICE
+)
+SELECT
+    B.BOOKING_ID,
+    S.SERVICE_ID,
+    3,
+    S.UNIT_PRICE
+FROM BOOKINGS B
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+CROSS JOIN SERVICES S
+WHERE R.ROOM_NUMBER = '301'
+  AND B.BOOKING_STATUS = 'CHECKED_IN'
+  AND S.SERVICE_NAME = 'Minibar';
+
+
+--laundry
+INSERT INTO BOOKING_SERVICES (
+    BOOKING_ID,
+    SERVICE_ID,
+    QUANTITY,
+    UNIT_PRICE
+)
+SELECT
+    B.BOOKING_ID,
+    S.SERVICE_ID,
+    1,
+    S.UNIT_PRICE
+FROM BOOKINGS B
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+CROSS JOIN SERVICES S
+WHERE R.ROOM_NUMBER = '301'
+  AND B.BOOKING_STATUS = 'CHECKED_IN'
+  AND S.SERVICE_NAME = 'Laundry';
+
+
+-- ============================================================
+-- 7. PAYMENTS
+-- ============================================================
+
+INSERT INTO PAYMENTS (
+    BOOKING_ID,
+    AMOUNT,
+    PAYMENT_METHOD,
+    PAYMENT_STATUS,
+    REFERENCE_CODE
+)
+SELECT
+    B.BOOKING_ID,
+    2100000,
+    'CARD',
+    'COMPLETED',
+    'PAY-DEMO-001'
+FROM BOOKINGS B
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+WHERE R.ROOM_NUMBER = '102'
+  AND B.BOOKING_STATUS = 'CHECKED_OUT';
+
+--booking 101 có deposit
+INSERT INTO PAYMENTS (
+    BOOKING_ID,
+    AMOUNT,
+    PAYMENT_METHOD,
+    PAYMENT_STATUS,
+    REFERENCE_CODE
+)
+SELECT
+    B.BOOKING_ID,
+    500000,
+    'BANK_TRANSFER',
+    'COMPLETED',
+    'PAY-DEMO-002'
+FROM BOOKINGS B
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+WHERE R.ROOM_NUMBER = '101'
+  AND B.BOOKING_STATUS = 'CONFIRMED';
+
+
+--booking_checkin thanh toán 1 phần
+INSERT INTO PAYMENTS (
+    BOOKING_ID,
+    AMOUNT,
+    PAYMENT_METHOD,
+    PAYMENT_STATUS,
+    REFERENCE_CODE
+)
+SELECT
+    B.BOOKING_ID,
+    1000000,
+    'CASH',
+    'COMPLETED',
+    'PAY-DEMO-003'
+FROM BOOKINGS B
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+WHERE R.ROOM_NUMBER = '301'
+  AND B.BOOKING_STATUS = 'CHECKED_IN';
+
+
+SELECT COUNT(*) AS AUDIT_COUNT
+FROM BOOKING_AUDIT;
+
+COMMIT;
+--check dữ liệu bằng join
+SELECT
+    B.BOOKING_ID,
+    C.FULL_NAME,
+    R.ROOM_NUMBER,
+    RT.TYPE_NAME,
+    B.CHECK_IN_DATE,
+    B.CHECK_OUT_DATE,
+    B.GUEST_COUNT,
+    B.ROOM_RATE,
+    B.BOOKING_STATUS
+FROM BOOKINGS B
+JOIN CUSTOMERS C
+    ON B.CUSTOMER_ID = C.CUSTOMER_ID
+JOIN ROOMS R
+    ON B.ROOM_ID = R.ROOM_ID
+JOIN ROOM_TYPES RT
+    ON R.ROOM_TYPE_ID = RT.ROOM_TYPE_ID
+ORDER BY B.BOOKING_ID;
+
+
+COMMIT;
+
+SELECT 'CUSTOMERS' AS TABLE_NAME, COUNT(*) AS TOTAL FROM CUSTOMERS
+UNION ALL
+SELECT 'ROOM_TYPES', COUNT(*) FROM ROOM_TYPES
+UNION ALL
+SELECT 'ROOMS', COUNT(*) FROM ROOMS
+UNION ALL
+SELECT 'SERVICES', COUNT(*) FROM SERVICES
+UNION ALL
+SELECT 'BOOKINGS', COUNT(*) FROM BOOKINGS
+UNION ALL
+SELECT 'BOOKING_SERVICES', COUNT(*) FROM BOOKING_SERVICES
+UNION ALL
+SELECT 'PAYMENTS', COUNT(*) FROM PAYMENTS
+UNION ALL
+SELECT 'BOOKING_AUDIT', COUNT(*) FROM BOOKING_AUDIT;
